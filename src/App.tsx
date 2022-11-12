@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { GameProvider } from './context/GameProvider'
 import Home from './pages/Home'
 import Room from './pages/Room'

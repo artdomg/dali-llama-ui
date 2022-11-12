@@ -1,9 +1,10 @@
-import { Button, Form, InputGroup, Spinner } from 'react-bootstrap';
-import { useAsyncCallback } from 'react-async-hook';
-import { useGame } from '../context/GameProvider';
-import Card from './Card';
-import { useState } from 'react';
-import styled from 'styled-components';
+import { Button, Form, InputGroup, Spinner } from 'react-bootstrap'
+import { useAsyncCallback } from 'react-async-hook'
+import { useGame } from '../context/GameProvider'
+import Card from './Card'
+import { useState } from 'react'
+import styled from 'styled-components'
+import { generateImages } from '../services/imageApi'
 
 const ImageList = styled.div`
   display: flex;
@@ -24,38 +25,26 @@ const ImageList = styled.div`
       object-fit: cover;
     }
   }
-`;
+`
 
 const ImagePicking = () => {
-  const { isLeader, currentPrompt } = useGame();
-  const [selectedUrl, setSelectedUrl] = useState('');
-  const [text, setText] = useState('');
+  const { isLeader, currentPrompt } = useGame()
+  const [selectedUrl, setSelectedUrl] = useState('')
+  const [text, setText] = useState('')
 
   const sendImage = () => {
     // TODO: Send image
-  };
+  }
 
   const fetchImageAsync = useAsyncCallback(async () => {
     // TODO: Fetch images
-    setText('');
-    setSelectedUrl('');
-    return {
-      image_urls: [
-        { url: 'https://cdn.mos.cms.futurecdn.net/CAZ6JXi6huSuN4QGE627NR.jpg' },
-        {
-          url: 'https://edit.co.uk/uploads/2016/12/Image-1-Alternatives-to-stock-photography-Thinkstock.jpg',
-        },
-        {
-          url: 'https://imageio.forbes.com/specials-images/imageserve/62d189da4c79a6e907c4a0f6/Selling-employee-stock-when-it-s-down/960x0.jpg?format=jpg&width=960',
-        },
-        {
-          url: 'https://techcrunch.com/wp-content/uploads/2022/06/Weird-Stock-Photography-Haje-Kamps-websize.jpeg',
-        },
-      ],
-    };
-  });
+    const result = await generateImages(text)
+    setText('')
+    setSelectedUrl('')
+    return result.data
+  })
 
-  const images = fetchImageAsync.result?.image_urls || [];
+  const images: string[] = fetchImageAsync.result?.images || []
 
   return (
     <div>
@@ -67,14 +56,14 @@ const ImagePicking = () => {
           <Form onSubmit={(e) => e.preventDefault()}>
             <InputGroup>
               <Form.Control
-                type="text"
-                placeholder="Purple unicorn holding light sabers"
+                type='text'
+                placeholder='Purple unicorn holding light sabers'
                 value={text}
                 onChange={(e) => setText(e.currentTarget.value)}
               />
               <Button
-                type="submit"
-                variant="dark"
+                type='submit'
+                variant='dark'
                 onClick={fetchImageAsync.execute}
                 disabled={fetchImageAsync.loading || !text}
               >
@@ -84,31 +73,31 @@ const ImagePicking = () => {
           </Form>
           <ImageList>
             {fetchImageAsync.loading ? (
-              <Spinner animation="border" />
+              <Spinner animation='border' />
             ) : (
               <>
                 {images.map((image) => (
                   <div
-                    className={selectedUrl === image.url ? 'selected' : ''}
+                    className={selectedUrl === image ? 'selected' : ''}
                     onClick={() => {
-                      setSelectedUrl(image.url);
+                      setSelectedUrl(image)
                     }}
                   >
-                    <img key={image.url} src={image.url} />
+                    <img key={image} src={image} />
                   </div>
                 ))}
               </>
             )}
           </ImageList>
           {selectedUrl && (
-            <Button onClick={sendImage} variant="dark">
+            <Button onClick={sendImage} variant='dark'>
               Send
             </Button>
           )}
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ImagePicking;
+export default ImagePicking

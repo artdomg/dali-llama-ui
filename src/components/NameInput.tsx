@@ -3,7 +3,7 @@ import { useAsyncCallback } from 'react-async-hook'
 import { Button, Form } from 'react-bootstrap'
 import { useGame } from '../context/GameProvider'
 import { joinRoom } from '../services/gameApi'
-import { FormContainer } from './FormContainer'
+import FormWrapper from './FormWrapper'
 
 const NameInput = () => {
   const { setToken, room, setMe } = useGame()
@@ -17,7 +17,8 @@ const NameInput = () => {
   })
 
   return (
-    <FormContainer>
+    <FormWrapper>
+      <h1>Join Game</h1>
       <Form onSubmit={(e) => e.preventDefault()}>
         <Form.Control
           required
@@ -28,14 +29,13 @@ const NameInput = () => {
         />
         <Button
           type='submit'
-          variant='dark'
           onClick={onSubmitAsync.execute}
           disabled={onSubmitAsync.loading || !username}
         >
           Join
         </Button>
       </Form>
-    </FormContainer>
+    </FormWrapper>
   )
 }
 

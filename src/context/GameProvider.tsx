@@ -69,6 +69,7 @@ export const GameProvider = ({ children }: Props) => {
   const [totalCardsToShow, setTotalCardsToShow] = useState(3)
 
   const handleGameStateChange = (data: any) => {
+    console.log('State', data)
     const { leaderIndex, players, phase, roundIndex } = data
 
     const playersById = players.reduce((acum: any, player: any) => {
