@@ -46,6 +46,12 @@ type Props = {
   children: React.ReactNode
 }
 
+const serverStatusMap: any = {
+  playing_leader_prompt: 'prompt',
+  playing_follower_promptss: 'image_picking',
+  playing_leader_choice: 'voting',
+}
+
 export const GameProvider = ({ children }: Props) => {
   const [room, setRoom] = useState('')
   const [status, setStatus] = useState<GameStatus>('waiting')
@@ -61,6 +67,26 @@ export const GameProvider = ({ children }: Props) => {
   const [phase, setPhase] = useState<Phase>('prompt')
   const [availableCards, setAvailableCards] = useState(defaultCards)
   const [totalCardsToShow, setTotalCardsToShow] = useState(3)
+
+  const handleGameStateChange = (data: any) => {
+    const { leaderIndex, players, phase, roundIndex } = data
+
+    const playersById = players.reduce((acum: any, player: any) => {
+      acum[player.id] = player
+      return acum
+    }, {})
+    setPlayers(playersById)
+
+    const leaderId = players[leaderIndex].id
+    setCurrentTurn(leaderId)
+
+    if (phase === 'waiting') {
+      setStatus('waiting')
+      setPhase('prompt')
+    } else {
+      setPhase(serverStatusMap[phase] as Phase)
+    }
+  }
 
   useEffect(() => {
     if (!token || socket) return
@@ -78,9 +104,7 @@ export const GameProvider = ({ children }: Props) => {
       console.log('Socket connected')
     })
 
-    socketConnection.on('state', (data) => {
-      console.log(data)
-    })
+    socketConnection.on('state', handleGameStateChange)
 
     setSocket(socketConnection)
   }, [token, socket])
