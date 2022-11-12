@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { io, Socket } from 'socket.io-client'
 import { defaultCards } from '../data/cards'
 
@@ -38,6 +45,7 @@ type GameContext = {
   currentPrompt: CardType
   setToken: (token: string) => void
   token: string
+  startGame: () => void
 }
 
 export const useGame = (): GameContext => useContext(Context)
@@ -114,6 +122,10 @@ export const GameProvider = ({ children }: Props) => {
     return currentTurn === players[me]?.id
   }, [me, currentTurn, players])
 
+  const startGame = useCallback(() => {
+    socket?.emit('start-game')
+  }, [socket])
+
   const value: GameContext = {
     status,
     setStatus,
@@ -130,6 +142,7 @@ export const GameProvider = ({ children }: Props) => {
     currentPrompt,
     setToken,
     token,
+    startGame,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

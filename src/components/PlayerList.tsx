@@ -1,18 +1,24 @@
-import { useGame } from '../context/GameProvider';
+import styled from 'styled-components'
+import { useGame } from '../context/GameProvider'
+
+const Player = styled.div`
+  border: 1px solid #ebeced;
+  border-radius: 8px;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+`
 
 const PlayerList = () => {
-  const { players } = useGame();
+  const { players } = useGame()
 
   return (
-    <div>
-      <h2>Players</h2>
-      <ul>
-        {Object.values(players).map((player) => (
-          <li key={player.name}>{player.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+    <>
+      {Object.values(players).map((player) => (
+        <Player key={player.name}>{player.name}</Player>
+      ))}
+    </>
+  )
+}
 
-export default PlayerList;
+export default PlayerList
