@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Container from '../components/Container'
 import Game from '../components/Game'
 import NameInput from '../components/NameInput'
-import ScoreBoard from '../components/ScoreBoard'
+import RightBar from '../components/RightBar'
 import TopBar from '../components/TopBar'
 import WaitingRoom from '../components/WaitingRoom'
 import { useGame } from '../context/GameProvider'
@@ -15,7 +15,7 @@ const RoomContainer = styled.div`
   min-height: 100vh;
 `
 const GameContainer = styled(Container)`
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
   padding: 30px 40px;
   display: flex;
   gap: 44px;
@@ -63,7 +63,7 @@ const Room = () => {
       <TopBar />
       <GameContainer>
         {component}
-        <ScoreBoard />
+        <RightBar />
       </GameContainer>
     </RoomContainer>
   )

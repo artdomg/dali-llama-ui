@@ -15,9 +15,15 @@ const HeaderContainer = styled.div`
 const ActionContainer = styled.div`
   display: flex;
   justify-content: center;
+  width: 100%;
+  margin-bottom: 30px;
+
+  span {
+    width: calc(33% - 36px);
+  }
 
   button {
-    width: 250px;
+    width: 100%;
     height: 52px;
   }
 `
@@ -54,7 +60,7 @@ const WaitingRoom = () => {
             {startGameButton}
           </OverlayTrigger>
         ) : (
-          startGameButton
+          <span>{startGameButton}</span>
         )}
       </ActionContainer>
     </div>
