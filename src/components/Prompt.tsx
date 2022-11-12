@@ -1,12 +1,9 @@
-import { useMemo } from 'react'
+import { useState } from 'react'
+import { Button, Form, InputGroup } from 'react-bootstrap'
 import styled from 'styled-components'
-import { CardType, useGame } from '../context/GameProvider'
+import { useGame } from '../context/GameProvider'
 import Card from './Card'
-import Timer from './Timer'
-
-const pickRandomCard = (cards: CardType[]) => {
-  return Math.floor(Math.random() * cards.length)
-}
+import StatusBar from './StatusBar'
 
 const CardsList = styled.div`
   display: flex;
@@ -15,48 +12,63 @@ const CardsList = styled.div`
 
 const PromptContainer = styled.div`
   padding: 30px 40px;
-`
 
-const StatusBar = styled.div`
-  display: flex;
-  justify-content: space-between;
+  p {
+    font-weight: bold;
+    margin-top: 20px;
+  }
 `
 
 const Prompt = () => {
-  const { availableCards, currentTurn, totalCardsToShow, players, isLeader } =
+  const { availableCards, currentTurn, players, isLeader, sendPrompt } =
     useGame()
+  const [prompt, setPrompt] = useState('')
 
-  const cards = useMemo(() => {
-    const remainingCards = [...availableCards]
-    const selectedCards = []
-    while (
-      selectedCards.length < totalCardsToShow &&
-      remainingCards.length > 0
-    ) {
-      const index = pickRandomCard(remainingCards)
-      selectedCards.push(remainingCards[index])
-      remainingCards.splice(index, 1)
-    }
-    return selectedCards
-  }, [availableCards, totalCardsToShow])
+  const onSendPrompt = () => {
+    if (!prompt) return
+    sendPrompt(prompt)
+  }
 
   return (
     <PromptContainer>
-      <StatusBar>
-        <strong>
-          {isLeader
+      <StatusBar
+        text={
+          isLeader
             ? `${players[currentTurn].name}, it's your turn. Please choose a prompt:`
-            : `${players[currentTurn].name} is choosing his prompt`}
-        </strong>
-        <Timer />
-      </StatusBar>
+            : `${players[currentTurn].name} is choosing his prompt`
+        }
+      />
       {isLeader ? (
         <div>
           <CardsList>
-            {cards.map((card) => (
-              <Card key={card.id} card={card} />
+            {availableCards.map((card) => (
+              <Card
+                key={card.id}
+                card={card}
+                onClick={() => sendPrompt(card.text)}
+              />
             ))}
           </CardsList>
+          <p>Or</p>
+          <Form onSubmit={(e) => e.preventDefault()}>
+            <InputGroup>
+              <Form.Control
+                type='text'
+                placeholder='My favorite soccer team is...'
+                value={prompt}
+                onChange={(e) => setPrompt(e.currentTarget.value)}
+              />
+              <Button onClick={onSendPrompt} disabled={!prompt}>
+                Submit prompt
+              </Button>
+            </InputGroup>
+          </Form>
+
+          {prompt && (
+            <div className='mt-4'>
+              <Card card={{ id: 1, text: prompt }} />
+            </div>
+          )}
         </div>
       ) : (
         <div>Waiting for {players[currentTurn].name}</div>

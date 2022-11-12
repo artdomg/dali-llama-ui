@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react'
 import { io, Socket } from 'socket.io-client'
-import { defaultCards } from '../data/cards'
 
 const Context = createContext(undefined as any)
 
@@ -16,6 +15,8 @@ type Player = {
   name: string
   score: number
   isLeader: boolean
+  choicePrompt?: string
+  choiceUrl?: string
 }
 
 type PlayerCollection = {
@@ -42,13 +43,15 @@ type GameContext = {
   me: string
   setMe: (id: string) => void
   availableCards: CardType[]
-  totalCardsToShow: number
   isLeader: boolean
   currentPrompt: CardType
   setToken: (token: string) => void
   token: string
   startGame: () => void
   timer: number
+  sendPrompt: (prompt: string) => void
+  sendChoice: (choicePrompt: string, choiceUrl: string) => void
+  sendLeaderChoice: (playerId: string) => void
 }
 
 export const useGame = (): GameContext => useContext(Context)
@@ -59,7 +62,7 @@ type Props = {
 
 const serverStatusMap: any = {
   playing_leader_prompt: 'prompt',
-  playing_follower_promptss: 'image_picking',
+  playing_follower_prompt: 'image_picking',
   playing_leader_choice: 'voting',
 }
 
@@ -76,13 +79,20 @@ export const GameProvider = ({ children }: Props) => {
   })
   const [currentTurn, setCurrentTurn] = useState('')
   const [phase, setPhase] = useState<Phase>('prompt')
-  const [availableCards, setAvailableCards] = useState(defaultCards)
-  const [totalCardsToShow, setTotalCardsToShow] = useState(3)
+  const [availableCards, setAvailableCards] = useState<CardType[]>([])
   const [timer, setTimer] = useState(0)
 
   const handleGameStateChange = (data: any) => {
     console.log('State', data)
-    const { leaderIndex, players, phase, roundIndex, timer } = data
+    const {
+      leaderIndex,
+      players,
+      phase,
+      roundIndex,
+      timer,
+      leaderPromptOptions,
+      leaderPrompt,
+    } = data
 
     const playersById = players.reduce((acum: any, player: any) => {
       acum[player.id] = player
@@ -93,6 +103,8 @@ export const GameProvider = ({ children }: Props) => {
     const leaderId = players[leaderIndex].id
     setCurrentTurn(leaderId)
     setTimer(timer)
+    setAvailableCards(leaderPromptOptions)
+    setCurrentPrompt({ id: 1, text: leaderPrompt })
 
     if (phase === 'waiting') {
       setStatus('waiting')
@@ -129,8 +141,33 @@ export const GameProvider = ({ children }: Props) => {
   }, [me, currentTurn, players])
 
   const startGame = useCallback(() => {
-    socket?.emit('start-game', { disableTimers: true })
+    const options: any = {}
+    if (process.env['REACT_APP_LOCAL']) {
+      options.disableTimers = true
+    }
+    socket?.emit('start-game', options)
   }, [socket])
+
+  const sendPrompt = useCallback(
+    (prompt: string) => {
+      socket?.emit('leader-prompt', prompt)
+    },
+    [socket]
+  )
+
+  const sendChoice = useCallback(
+    (choicePrompt: string, choiceUrl: string) => {
+      socket?.emit('follower-choice', { choicePrompt, choiceUrl })
+    },
+    [socket]
+  )
+
+  const sendLeaderChoice = useCallback(
+    (playerId: string) => {
+      socket?.emit('leader-choice', playerId)
+    },
+    [socket]
+  )
 
   const value: GameContext = {
     status,
@@ -143,13 +180,15 @@ export const GameProvider = ({ children }: Props) => {
     me,
     setMe,
     availableCards,
-    totalCardsToShow,
     isLeader,
     currentPrompt,
     setToken,
     token,
     startGame,
     timer,
+    sendPrompt,
+    sendChoice,
+    sendLeaderChoice,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

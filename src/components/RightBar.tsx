@@ -59,11 +59,9 @@ const RightBar = () => {
             <strong className='score'>Points</strong>
           </div>
           {Object.values(players).map((player) => (
-            <div className={player.isLeader ? 'active' : ''}>
-              <PlayerName key={`${player.id}_name`}>{player.name}</PlayerName>
-              <span className='score' key={`${player.id}_points`}>
-                {player.score}
-              </span>
+            <div className={player.isLeader ? 'active' : ''} key={player.id}>
+              <PlayerName>{player.name}</PlayerName>
+              <span className='score'>{player.score}</span>
             </div>
           ))}
         </PlayersGrid>

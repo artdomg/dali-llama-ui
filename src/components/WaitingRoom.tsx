@@ -33,9 +33,11 @@ const WaitingRoom = () => {
 
   const totalPlayers = Object.values(players).length
 
+  const canStart = totalPlayers > 1
+
   const startGameButton = (
     <span>
-      <Button disabled={totalPlayers < 3} onClick={startGame}>
+      <Button disabled={!canStart} onClick={startGame}>
         Start Game
       </Button>
     </span>
@@ -50,7 +52,7 @@ const WaitingRoom = () => {
       <PlayerGrid />
 
       <ActionContainer>
-        {totalPlayers < 3 ? (
+        {!canStart ? (
           <OverlayTrigger
             placement='right'
             overlay={
