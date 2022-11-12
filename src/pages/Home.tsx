@@ -11,7 +11,7 @@ const Home = () => {
   const navigate = useNavigate()
   const { setMe, setToken } = useGame()
   const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('TeamDaliWins')
 
   const createRoomAsync = useAsyncCallback(async () => {
     if (password !== DEFAULT_PASS) throw new Error('Incorrect password')

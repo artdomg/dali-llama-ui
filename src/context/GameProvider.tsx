@@ -14,6 +14,8 @@ const Context = createContext(undefined as any)
 type Player = {
   id: string
   name: string
+  score: number
+  isLeader: boolean
 }
 
 type PlayerCollection = {
@@ -46,6 +48,7 @@ type GameContext = {
   setToken: (token: string) => void
   token: string
   startGame: () => void
+  timer: number
 }
 
 export const useGame = (): GameContext => useContext(Context)
@@ -75,10 +78,11 @@ export const GameProvider = ({ children }: Props) => {
   const [phase, setPhase] = useState<Phase>('prompt')
   const [availableCards, setAvailableCards] = useState(defaultCards)
   const [totalCardsToShow, setTotalCardsToShow] = useState(3)
+  const [timer, setTimer] = useState(0)
 
   const handleGameStateChange = (data: any) => {
     console.log('State', data)
-    const { leaderIndex, players, phase, roundIndex } = data
+    const { leaderIndex, players, phase, roundIndex, timer } = data
 
     const playersById = players.reduce((acum: any, player: any) => {
       acum[player.id] = player
@@ -88,11 +92,13 @@ export const GameProvider = ({ children }: Props) => {
 
     const leaderId = players[leaderIndex].id
     setCurrentTurn(leaderId)
+    setTimer(timer)
 
     if (phase === 'waiting') {
       setStatus('waiting')
       setPhase('prompt')
     } else {
+      setStatus('started')
       setPhase(serverStatusMap[phase] as Phase)
     }
   }
@@ -123,7 +129,7 @@ export const GameProvider = ({ children }: Props) => {
   }, [me, currentTurn, players])
 
   const startGame = useCallback(() => {
-    socket?.emit('start-game')
+    socket?.emit('start-game', { disableTimers: true })
   }, [socket])
 
   const value: GameContext = {
@@ -143,6 +149,7 @@ export const GameProvider = ({ children }: Props) => {
     setToken,
     token,
     startGame,
+    timer,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

@@ -1,37 +1,55 @@
-import { useMemo } from 'react';
-import styled from 'styled-components';
-import { CardType, useGame } from '../context/GameProvider';
-import Card from './Card';
+import { useMemo } from 'react'
+import styled from 'styled-components'
+import { CardType, useGame } from '../context/GameProvider'
+import Card from './Card'
+import Timer from './Timer'
 
 const pickRandomCard = (cards: CardType[]) => {
-  return Math.floor(Math.random() * cards.length);
-};
+  return Math.floor(Math.random() * cards.length)
+}
 
 const CardsList = styled.div`
   display: flex;
   gap: 25px;
-`;
+`
+
+const PromptContainer = styled.div`
+  padding: 30px 40px;
+`
+
+const StatusBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 
 const Prompt = () => {
   const { availableCards, currentTurn, totalCardsToShow, players, isLeader } =
-    useGame();
+    useGame()
 
   const cards = useMemo(() => {
-    const remainingCards = [...availableCards];
-    const selectedCards = [];
+    const remainingCards = [...availableCards]
+    const selectedCards = []
     while (
       selectedCards.length < totalCardsToShow &&
       remainingCards.length > 0
     ) {
-      const index = pickRandomCard(remainingCards);
-      selectedCards.push(remainingCards[index]);
-      remainingCards.splice(index, 1);
+      const index = pickRandomCard(remainingCards)
+      selectedCards.push(remainingCards[index])
+      remainingCards.splice(index, 1)
     }
-    return selectedCards;
-  }, [availableCards, totalCardsToShow]);
+    return selectedCards
+  }, [availableCards, totalCardsToShow])
 
   return (
-    <div>
+    <PromptContainer>
+      <StatusBar>
+        <strong>
+          {isLeader
+            ? `${players[currentTurn].name}, it's your turn. Please choose a prompt:`
+            : `${players[currentTurn].name} is choosing his prompt`}
+        </strong>
+        <Timer />
+      </StatusBar>
       {isLeader ? (
         <div>
           <CardsList>
@@ -43,8 +61,8 @@ const Prompt = () => {
       ) : (
         <div>Waiting for {players[currentTurn].name}</div>
       )}
-    </div>
-  );
-};
+    </PromptContainer>
+  )
+}
 
-export default Prompt;
+export default Prompt

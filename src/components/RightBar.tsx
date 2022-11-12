@@ -2,11 +2,12 @@ import styled from 'styled-components'
 import { useGame } from '../context/GameProvider'
 
 const ScoreBoardContainer = styled.div`
-  padding: 44px 30px;
   height: 55%;
   border-bottom: 1px solid #ebeced;
 
   h2 {
+    margin-top: 30px;
+    margin-left: 44px;
     font-weight: bold;
     font-size: 26px;
     margin-bottom: 19px;
@@ -24,9 +25,19 @@ const PlayersGrid = styled.div`
   overflow-y: auto;
 
   & > div {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    padding: 6px 30px;
+    justify-content: space-between;
+
+    .score {
+      width: 60px;
+      text-align: center;
+    }
+
+    &.active {
+      background-color: #204ecf;
+      color: #ffffff;
+    }
   }
 `
 
@@ -45,16 +56,16 @@ const RightBar = () => {
         <PlayersGrid>
           <div>
             <strong>Players</strong>
-            <strong className='text-center'>Points</strong>
-            {Object.values(players).map((player) => (
-              <>
-                <PlayerName key={`${player.id}_name`}>{player.name}</PlayerName>
-                <span className='text-center' key={`${player.id}_points`}>
-                  0
-                </span>
-              </>
-            ))}
+            <strong className='score'>Points</strong>
           </div>
+          {Object.values(players).map((player) => (
+            <div className={player.isLeader ? 'active' : ''}>
+              <PlayerName key={`${player.id}_name`}>{player.name}</PlayerName>
+              <span className='score' key={`${player.id}_points`}>
+                {player.score}
+              </span>
+            </div>
+          ))}
         </PlayersGrid>
       </ScoreBoardContainer>
     </div>
