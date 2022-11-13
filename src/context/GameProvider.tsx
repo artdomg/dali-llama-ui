@@ -98,6 +98,7 @@ export const GameProvider = ({ children }: Props) => {
   const [phase, setPhase] = useState<Phase>('prompt')
   const [availableCards, setAvailableCards] = useState<CardType[]>([])
   const [timer, setTimer] = useState(0)
+  const [timerId, setTimerId] = useState('')
   const [round, setRound] = useState(1)
   const [winner, setWinner] = useState<Winner | undefined>(undefined)
   const [messages, setMessages] = useState<Message[]>([])
@@ -124,6 +125,7 @@ export const GameProvider = ({ children }: Props) => {
 
     const leaderId = players[leaderIndex]?.id
     setCurrentTurn(leaderId)
+    setTimerId(timerId)
     setTimer(timer)
     setAvailableCards(leaderPromptOptions)
     setCurrentPrompt({ id: 1, text: leaderPrompt })
@@ -225,6 +227,7 @@ export const GameProvider = ({ children }: Props) => {
     setToken,
     token,
     startGame,
+    timerId,
     timer,
     sendPrompt,
     sendChoice,
