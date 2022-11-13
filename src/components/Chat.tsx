@@ -29,7 +29,7 @@ const PlayerName = styled.strong`
 `
 
 const Chat = () => {
-  const { sendMessage, messages } = useGame()
+  const { sendMessage, messages, setShaking } = useGame()
   const [text, setText] = useState('')
   const messagesContainer = useRef(null)
 
@@ -37,6 +37,12 @@ const Chat = () => {
     const element: HTMLElement = messagesContainer.current as any
     element.scrollTo(0, element.offsetHeight)
   }, [messages.length])
+
+  useEffect(() => {
+    if (messages[messages.length - 1]?.text !== 'shake it')
+      return setShaking(false)
+    setShaking(true)
+  }, [messages[messages.length - 1]?.text])
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

@@ -62,6 +62,8 @@ type GameContext = {
   winner?: Winner
   sendMessage: (text: string) => void
   messages: Message[]
+  shaking: boolean
+  setShaking: (value: boolean) => void
 }
 
 type Message = {
@@ -102,6 +104,7 @@ export const GameProvider = ({ children }: Props) => {
   const [round, setRound] = useState(1)
   const [winner, setWinner] = useState<Winner | undefined>(undefined)
   const [messages, setMessages] = useState<Message[]>([])
+  const [shaking, setShaking] = useState(false)
 
   const handleGameStateChange = (data: any) => {
     console.log('State', data)
@@ -237,6 +240,12 @@ export const GameProvider = ({ children }: Props) => {
     winner,
     sendMessage,
     messages,
+    setShaking: (value: boolean) => {
+      console.log('shake!')
+      setShaking(value)
+      setTimeout(() => setShaking(false), 3000)
+    },
+    shaking,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>
