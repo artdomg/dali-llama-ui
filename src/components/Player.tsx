@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Player, useGame } from '../context/GameProvider'
 import toptalMedal from '../assets/toptalMedal.svg'
+import userIcon from '../assets/user.png'
 
 const PlayerContainer = styled.div`
   border: 1px solid #ebeced;
@@ -25,6 +26,16 @@ const Medal = styled.div`
   z-index: 10;
 `
 
+const PlayerName = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    height: 25px;
+  }
+`
+
 type Props = {
   player: Player
   showMedal?: boolean
@@ -42,7 +53,9 @@ const PlayerComponent = ({ player, showMedal }: Props) => {
           <img src={toptalMedal} alt='medal' />
         </Medal>
       )}
-      <div>{player.name}</div>
+      <PlayerName>
+        <img src={userIcon} /> {player.name}
+      </PlayerName>
       {gameEnded && <Score>{player.score}</Score>}
     </PlayerContainer>
   )

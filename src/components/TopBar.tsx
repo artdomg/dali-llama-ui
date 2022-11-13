@@ -3,6 +3,7 @@ import Container from './Container'
 import logo from '../assets/logo.png'
 import configIcon from '../assets/configIcon.svg'
 import leaderboardIcon from '../assets/leaderboardIcon.svg'
+import userIcon from '../assets/user.png'
 
 const TopBarContainer = styled.div`
   width: 100%;
@@ -21,6 +22,11 @@ const Content = styled(Container)`
 const Menu = styled.div`
   display: flex;
   gap: 50px;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
 `
 
 const LeaderboardContainer = styled.div`
@@ -35,6 +41,7 @@ const TopBar = () => {
       <Content>
         <img src={logo} width='40' height='40' />
         <Menu>
+          <img src={userIcon} />
           <LeaderboardContainer>
             <img src={leaderboardIcon} width='22' height='22' /> Leaderboard
           </LeaderboardContainer>
