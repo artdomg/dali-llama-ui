@@ -6,6 +6,8 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { generateImages } from '../services/imageApi'
 import StatusBar from './StatusBar'
+import Lottie from 'lottie-react'
+import animationData from '../assets/happypaca.json'
 
 const PickerContainer = styled.div`
   padding: 30px 40px;
@@ -38,6 +40,13 @@ const ImageList = styled.div`
   }
 `
 
+const AnimationContainer = styled.div`
+  width: 400px;
+  height: 400px;
+  margin: auto;
+  margin-top: 50px;
+`
+
 const ImagePicking = () => {
   const { isLeader, currentPrompt, currentTurn, players, me, sendChoice } =
     useGame()
@@ -64,14 +73,19 @@ const ImagePicking = () => {
       <StatusBar
         text={
           isLeader
-            ? 'Waiting for followers'
+            ? 'Waiting for other players to submit their image'
             : `${players[currentTurn].name}'s prompt:`
         }
       />
-      {!isLeader && (
+      {!isLeader ? (
         <div>
           {selectedUrl ? (
-            <p>Waiting for other players</p>
+            <>
+              <p>Waiting for other players</p>
+              <AnimationContainer>
+                <Lottie animationData={animationData} loop />
+              </AnimationContainer>
+            </>
           ) : (
             <>
               <Card card={currentPrompt} />
@@ -118,6 +132,10 @@ const ImagePicking = () => {
             </>
           )}
         </div>
+      ) : (
+        <AnimationContainer>
+          <Lottie animationData={animationData} loop />
+        </AnimationContainer>
       )}
     </PickerContainer>
   )
