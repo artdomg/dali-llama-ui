@@ -110,6 +110,7 @@ export const GameProvider = ({ children }: Props) => {
       players,
       phase,
       roundIndex,
+      timerId,
       timer,
       leaderPromptOptions,
       leaderPrompt,
