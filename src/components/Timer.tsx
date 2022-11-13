@@ -25,7 +25,7 @@ const Timer = () => {
     if (!timer || !timerId || timerId === lastTimerId) return
     lastTimerId = timerId
     setLocalTimer(timer)
-  }, [timer])
+  }, [timer, timerId])
 
   useEffect(() => {
     const interval = setInterval(
