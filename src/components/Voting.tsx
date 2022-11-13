@@ -45,7 +45,7 @@ const Voting = () => {
         text={
           isLeader
             ? 'Choose a prompt'
-            : `${players[currentTurn].name} is choosing his prompt`
+            : `${players[currentTurn].name} is choosing their prompt`
         }
       />
       <p>{currentPrompt.text}</p>
