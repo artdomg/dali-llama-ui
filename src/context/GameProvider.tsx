@@ -52,6 +52,7 @@ type GameContext = {
   sendPrompt: (prompt: string) => void
   sendChoice: (choicePrompt: string, choiceUrl: string) => void
   sendLeaderChoice: (playerId: string) => void
+  round: number
 }
 
 export const useGame = (): GameContext => useContext(Context)
@@ -81,6 +82,7 @@ export const GameProvider = ({ children }: Props) => {
   const [phase, setPhase] = useState<Phase>('prompt')
   const [availableCards, setAvailableCards] = useState<CardType[]>([])
   const [timer, setTimer] = useState(0)
+  const [round, setRound] = useState(1)
 
   const handleGameStateChange = (data: any) => {
     console.log('State', data)
@@ -105,6 +107,7 @@ export const GameProvider = ({ children }: Props) => {
     setTimer(timer)
     setAvailableCards(leaderPromptOptions)
     setCurrentPrompt({ id: 1, text: leaderPrompt })
+    setRound(roundIndex + 1)
 
     if (phase === 'waiting') {
       setStatus('waiting')
@@ -189,6 +192,7 @@ export const GameProvider = ({ children }: Props) => {
     sendPrompt,
     sendChoice,
     sendLeaderChoice,
+    round,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

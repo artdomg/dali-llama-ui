@@ -46,12 +46,12 @@ const PlayerName = styled.span`
 `
 
 const RightBar = () => {
-  const { players } = useGame()
+  const { players, round } = useGame()
 
   return (
     <div>
       <ScoreBoardContainer>
-        <h2>Round 1</h2>
+        <h2>Round {round}</h2>
         <Divider className='mb-3' />
         <PlayersGrid>
           <div>
