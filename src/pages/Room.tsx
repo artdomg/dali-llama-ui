@@ -12,7 +12,7 @@ import { useGame } from '../context/GameProvider'
 const RoomContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  max-height: 100vh;
 
   &.shaking {
     animation: shake 0.5s;
