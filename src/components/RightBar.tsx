@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { useGame } from '../context/GameProvider'
 import toptalIcon from '../assets/toptalIcon.svg'
+import Chat from './Chat'
 
 const ScoreBoardContainer = styled.div`
   height: 55%;
@@ -13,6 +14,10 @@ const ScoreBoardContainer = styled.div`
     font-size: 26px;
     margin-bottom: 19px;
   }
+`
+
+const ChatContainer = styled.div`
+  height: 45%;
 `
 
 const Divider = styled.div`
@@ -80,6 +85,9 @@ const RightBar = () => {
           ))}
         </PlayersGrid>
       </ScoreBoardContainer>
+      <ChatContainer>
+        <Chat />
+      </ChatContainer>
     </div>
   )
 }

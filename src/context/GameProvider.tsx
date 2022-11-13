@@ -59,6 +59,14 @@ type GameContext = {
   sendLeaderChoice: (playerId: string) => void
   round: number
   winner?: Winner
+  sendMessage: (text: string) => void
+  messages: Message[]
+}
+
+type Message = {
+  id: string
+  playerName: string
+  text: string
 }
 
 export const useGame = (): GameContext => useContext(Context)
@@ -91,6 +99,7 @@ export const GameProvider = ({ children }: Props) => {
   const [timer, setTimer] = useState(0)
   const [round, setRound] = useState(1)
   const [winner, setWinner] = useState<Winner | undefined>(undefined)
+  const [messages, setMessages] = useState<Message[]>([])
 
   const handleGameStateChange = (data: any) => {
     console.log('State', data)
@@ -103,6 +112,7 @@ export const GameProvider = ({ children }: Props) => {
       leaderPromptOptions,
       leaderPrompt,
       winner,
+      messages,
     } = data
 
     const playersById = players.reduce((acum: any, player: any) => {
@@ -118,6 +128,11 @@ export const GameProvider = ({ children }: Props) => {
     setCurrentPrompt({ id: 1, text: leaderPrompt })
     setRound(roundIndex + 1)
     setWinner(winner)
+    if (messages) {
+      setMessages(messages)
+    } else {
+      setMessages([])
+    }
 
     if (phase === 'waiting') {
       if (leaderIndex !== 0) {
@@ -186,6 +201,13 @@ export const GameProvider = ({ children }: Props) => {
     [socket]
   )
 
+  const sendMessage = useCallback(
+    (text: string) => {
+      socket?.emit('chat-message', text)
+    },
+    [socket]
+  )
+
   const value: GameContext = {
     status,
     setStatus,
@@ -208,6 +230,8 @@ export const GameProvider = ({ children }: Props) => {
     sendLeaderChoice,
     round,
     winner,
+    sendMessage,
+    messages,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>
