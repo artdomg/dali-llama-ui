@@ -52,7 +52,7 @@ const Home = () => {
           disabled={createRoomAsync.loading}
           onClick={createRoomAsync.execute}
         >
-          Start Game
+          Create Game
         </Button>
       </Form>
     </FormWrapper>

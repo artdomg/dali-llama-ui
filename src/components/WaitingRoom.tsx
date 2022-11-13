@@ -29,16 +29,18 @@ const ActionContainer = styled.div`
 `
 
 const WaitingRoom = () => {
-  const { players, startGame } = useGame()
+  const { players, startGame, status } = useGame()
 
   const totalPlayers = Object.values(players).length
 
   const canStart = totalPlayers > 1
 
+  const gameEnded = status === 'ended'
+
   const startGameButton = (
     <span>
       <Button disabled={!canStart} onClick={startGame}>
-        Start Game
+        Start {gameEnded && 'New'} Game
       </Button>
     </span>
   )
@@ -48,6 +50,10 @@ const WaitingRoom = () => {
       <HeaderContainer>
         <img src={headerImage} alt='decorative' />
       </HeaderContainer>
+
+      <p className='mx-5 mt-4'>
+        Copy and share this link with your friends so they can join your game
+      </p>
 
       <PlayerGrid />
 

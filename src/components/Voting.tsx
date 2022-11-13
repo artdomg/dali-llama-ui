@@ -28,7 +28,8 @@ const ImagesContainer = styled.div`
 `
 
 const Voting = () => {
-  const { currentTurn, players, isLeader, sendLeaderChoice } = useGame()
+  const { currentTurn, players, isLeader, sendLeaderChoice, currentPrompt } =
+    useGame()
 
   return (
     <VotingContainer>
@@ -39,6 +40,7 @@ const Voting = () => {
             : `${players[currentTurn].name} is choosing his prompt`
         }
       />
+      <p>{currentPrompt.text}</p>
       <ImagesContainer>
         {Object.values(players)
           .filter((player) => !!player.choiceUrl)

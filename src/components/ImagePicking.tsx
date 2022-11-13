@@ -17,13 +17,13 @@ const PickerContainer = styled.div`
 `
 
 const ImageList = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 25px;
   margin-top: 30px;
 
   & > div {
-    width: 230px;
-    height: 230px;
+    aspect-ratio: 1/1;
     cursor: pointer;
 
     &.selected {
@@ -46,14 +46,13 @@ const ImagePicking = () => {
   const [query, setQuery] = useState('')
 
   const sendImage = (image: string) => {
-    setSelectedUrl(image)
     sendChoice(query, image)
+    setSelectedUrl(image)
   }
 
   const fetchImageAsync = useAsyncCallback(async () => {
     const result = await generateImages(text)
     setQuery(text)
-    setText('')
     setSelectedUrl('')
     return result.data
   })
@@ -71,47 +70,53 @@ const ImagePicking = () => {
       />
       {!isLeader && (
         <div>
-          <Card card={currentPrompt} />
+          {selectedUrl ? (
+            <p>Waiting for other players</p>
+          ) : (
+            <>
+              <Card card={currentPrompt} />
 
-          <p>
-            {players[me].name}, enter your answer, click draw and select an
-            image:
-          </p>
+              <p>
+                {players[me].name}, enter your answer, click draw and select an
+                image:
+              </p>
 
-          <Form onSubmit={(e) => e.preventDefault()}>
-            <InputGroup>
-              <Form.Control
-                type='text'
-                placeholder='Arnold Schwarzenegger in samurai armor kicking ass'
-                value={text}
-                onChange={(e) => setText(e.currentTarget.value)}
-              />
-              <Button
-                type='submit'
-                onClick={fetchImageAsync.execute}
-                disabled={fetchImageAsync.loading || !text}
-              >
-                Draw
-              </Button>
-            </InputGroup>
-          </Form>
-          <ImageList>
-            {fetchImageAsync.loading ? (
-              <Spinner animation='border' />
-            ) : (
-              images.map((image) => (
-                <div
-                  key={image}
-                  className={selectedUrl === image ? 'selected' : ''}
-                  onClick={() => {
-                    sendImage(image)
-                  }}
-                >
-                  <img key={image} src={image} alt='prompt option' />
-                </div>
-              ))
-            )}
-          </ImageList>
+              <Form onSubmit={(e) => e.preventDefault()}>
+                <InputGroup>
+                  <Form.Control
+                    type='text'
+                    placeholder='Arnold Schwarzenegger in samurai armor kicking ass'
+                    value={text}
+                    onChange={(e) => setText(e.currentTarget.value)}
+                  />
+                  <Button
+                    type='submit'
+                    onClick={fetchImageAsync.execute}
+                    disabled={fetchImageAsync.loading || !text}
+                  >
+                    {fetchImageAsync.loading && (
+                      <Spinner animation='border' size='sm' />
+                    )}{' '}
+                    Draw
+                  </Button>
+                </InputGroup>
+              </Form>
+              <ImageList>
+                {!fetchImageAsync.loading &&
+                  images.map((image) => (
+                    <div
+                      key={image}
+                      className={selectedUrl === image ? 'selected' : ''}
+                      onClick={() => {
+                        sendImage(image)
+                      }}
+                    >
+                      <img key={image} src={image} alt='prompt option' />
+                    </div>
+                  ))}
+              </ImageList>
+            </>
+          )}
         </div>
       )}
     </PickerContainer>

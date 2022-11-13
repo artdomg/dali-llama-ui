@@ -12,7 +12,7 @@ const Timer = () => {
 
   useEffect(() => {
     const interval = setInterval(
-      () => setLocalTimer((value) => value - 1),
+      () => setLocalTimer((value) => (value - 1 < 0 ? 0 : value - 1)),
       1000
     )
     return () => clearInterval(interval)

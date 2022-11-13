@@ -55,7 +55,7 @@ const Room = () => {
   } else if (status === 'started') {
     component = <Game />
   } else {
-    component = <div>End</div>
+    component = <WaitingRoom />
   }
 
   return (

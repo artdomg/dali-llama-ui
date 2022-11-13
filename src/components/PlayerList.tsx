@@ -1,21 +1,29 @@
-import styled from 'styled-components'
+import { useMemo } from 'react'
 import { useGame } from '../context/GameProvider'
-
-const Player = styled.div`
-  border: 1px solid #ebeced;
-  border-radius: 8px;
-  padding: 15px 20px;
-  display: flex;
-  align-items: center;
-`
+import Player from './Player'
 
 const PlayerList = () => {
-  const { players } = useGame()
+  const { players, status } = useGame()
+
+  const medals = useMemo(() => {
+    const maxScore = Object.values(players).reduce((acum, player) => {
+      if (player.score > acum) return player.score
+      return acum
+    }, 0)
+    return Object.values(players).reduce((acum: any, player) => {
+      acum[player.id] = status === 'ended' && player.score >= maxScore
+      return acum
+    }, {})
+  }, [players, status])
 
   return (
     <>
       {Object.values(players).map((player) => (
-        <Player key={player.name}>{player.name}</Player>
+        <Player
+          key={player.name}
+          player={player}
+          showMedal={medals[player.id]}
+        />
       ))}
     </>
   )

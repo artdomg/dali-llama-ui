@@ -19,6 +19,18 @@ const PromptContainer = styled.div`
   }
 `
 
+const UnknownCard = styled.div`
+  width: 266px;
+  height: 266px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  background-color: #000000;
+  font-size: 120px;
+  font-weight: bold;
+`
+
 const Prompt = () => {
   const { availableCards, currentTurn, players, isLeader, sendPrompt } =
     useGame()
@@ -71,7 +83,9 @@ const Prompt = () => {
           )}
         </div>
       ) : (
-        <div>Waiting for {players[currentTurn].name}</div>
+        <div>
+          <UnknownCard>?</UnknownCard>
+        </div>
       )}
     </PromptContainer>
   )

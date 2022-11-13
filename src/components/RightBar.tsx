@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useGame } from '../context/GameProvider'
+import toptalIcon from '../assets/toptalIcon.svg'
 
 const ScoreBoardContainer = styled.div`
   height: 55%;
@@ -37,12 +38,20 @@ const PlayersGrid = styled.div`
     &.active {
       background-color: #204ecf;
       color: #ffffff;
+      padding-left: 18px;
+
+      .playerName {
+        padding-left: 0;
+      }
+    }
+
+    .playerName {
+      padding-left: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
   }
-`
-
-const PlayerName = styled.span`
-  padding-left: 14px;
 `
 
 const RightBar = () => {
@@ -60,7 +69,12 @@ const RightBar = () => {
           </div>
           {Object.values(players).map((player) => (
             <div className={player.isLeader ? 'active' : ''} key={player.id}>
-              <PlayerName>{player.name}</PlayerName>
+              <span className='playerName'>
+                {player.isLeader && (
+                  <img src={toptalIcon} width='14' alt='toptal icon' />
+                )}{' '}
+                {player.name}
+              </span>
               <span className='score'>{player.score}</span>
             </div>
           ))}

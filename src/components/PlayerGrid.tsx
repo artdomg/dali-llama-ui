@@ -6,7 +6,7 @@ const PlayerGridContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 19px;
-  margin: 34px 40px;
+  margin: 26px 40px;
 `
 
 const PlayerGrid = () => {

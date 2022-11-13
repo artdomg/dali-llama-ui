@@ -10,7 +10,7 @@ import { io, Socket } from 'socket.io-client'
 
 const Context = createContext(undefined as any)
 
-type Player = {
+export type Player = {
   id: string
   name: string
   score: number
@@ -19,13 +19,18 @@ type Player = {
   choiceUrl?: string
 }
 
+type Winner = {
+  choiceUrl: string
+  name: string
+}
+
 type PlayerCollection = {
   [id: string]: Player
 }
 
 type GameStatus = 'waiting' | 'started' | 'ended'
 
-type Phase = 'prompt' | 'image_picking' | 'voting'
+type Phase = 'prompt' | 'image_picking' | 'voting' | 'winner'
 
 export type CardType = {
   id: number
@@ -53,6 +58,7 @@ type GameContext = {
   sendChoice: (choicePrompt: string, choiceUrl: string) => void
   sendLeaderChoice: (playerId: string) => void
   round: number
+  winner?: Winner
 }
 
 export const useGame = (): GameContext => useContext(Context)
@@ -65,6 +71,7 @@ const serverStatusMap: any = {
   playing_leader_prompt: 'prompt',
   playing_follower_prompt: 'image_picking',
   playing_leader_choice: 'voting',
+  showing_winner: 'winner',
 }
 
 export const GameProvider = ({ children }: Props) => {
@@ -83,6 +90,7 @@ export const GameProvider = ({ children }: Props) => {
   const [availableCards, setAvailableCards] = useState<CardType[]>([])
   const [timer, setTimer] = useState(0)
   const [round, setRound] = useState(1)
+  const [winner, setWinner] = useState<Winner | undefined>(undefined)
 
   const handleGameStateChange = (data: any) => {
     console.log('State', data)
@@ -94,6 +102,7 @@ export const GameProvider = ({ children }: Props) => {
       timer,
       leaderPromptOptions,
       leaderPrompt,
+      winner,
     } = data
 
     const playersById = players.reduce((acum: any, player: any) => {
@@ -102,15 +111,20 @@ export const GameProvider = ({ children }: Props) => {
     }, {})
     setPlayers(playersById)
 
-    const leaderId = players[leaderIndex].id
+    const leaderId = players[leaderIndex]?.id
     setCurrentTurn(leaderId)
     setTimer(timer)
     setAvailableCards(leaderPromptOptions)
     setCurrentPrompt({ id: 1, text: leaderPrompt })
     setRound(roundIndex + 1)
+    setWinner(winner)
 
     if (phase === 'waiting') {
-      setStatus('waiting')
+      if (leaderIndex !== 0) {
+        setStatus('ended')
+      } else {
+        setStatus('waiting')
+      }
       setPhase('prompt')
     } else {
       setStatus('started')
@@ -193,6 +207,7 @@ export const GameProvider = ({ children }: Props) => {
     sendChoice,
     sendLeaderChoice,
     round,
+    winner,
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>
