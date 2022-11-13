@@ -41,6 +41,7 @@ const Winner = () => {
       <ImageContainer>
         <img src={winner?.choiceUrl} alt='winner' />
       </ImageContainer>
+      <div className='text-center mt-3'>{winner?.choicePrompt}</div>
     </WinnerContainer>
   )
 }

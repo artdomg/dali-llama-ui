@@ -22,6 +22,7 @@ export type Player = {
 type Winner = {
   choiceUrl: string
   name: string
+  choicePrompt: string
 }
 
 type PlayerCollection = {
@@ -107,7 +108,6 @@ export const GameProvider = ({ children }: Props) => {
   const [shaking, setShaking] = useState(false)
 
   const handleGameStateChange = (data: any) => {
-    console.log('State', data)
     const {
       leaderIndex,
       players,
@@ -241,7 +241,6 @@ export const GameProvider = ({ children }: Props) => {
     sendMessage,
     messages,
     setShaking: (value: boolean) => {
-      console.log('shake!')
       setShaking(value)
       setTimeout(() => setShaking(false), 3000)
     },
