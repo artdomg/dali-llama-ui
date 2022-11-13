@@ -33,7 +33,7 @@ const WaitingRoom = () => {
 
   const totalPlayers = Object.values(players).length
 
-  const canStart = totalPlayers > 1
+  const canStart = totalPlayers > 2
 
   const gameEnded = status === 'ended'
 
