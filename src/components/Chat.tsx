@@ -17,6 +17,9 @@ const MessagesContainer = styled.div`
   width: 100%;
   overflow-y: auto;
   padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `
 
 const InputBox = styled.div``
