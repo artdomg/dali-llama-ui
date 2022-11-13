@@ -39,8 +39,9 @@ const Chat = () => {
   }, [messages.length])
 
   useEffect(() => {
-    const text = messages[messages.length - 1]?.text
-    if (text !== 'shake it' && text !== 'hurry up') return setShaking(false)
+    const text = (messages[messages.length - 1]?.text || '').toLowerCase()
+    const shakeItPrompts = ['shake it', 'hurry up']
+    if (!shakeItPrompts.includes(text)) return setShaking(false)
     setShaking(true)
   }, [messages[messages.length - 1]?.text])
 
