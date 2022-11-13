@@ -10,10 +10,13 @@ const PlayerList = () => {
       if (player.score > acum) return player.score
       return acum
     }, 0)
-    return Object.values(players).reduce((acum: any, player) => {
-      acum[player.id] = status === 'ended' && player.score >= maxScore
-      return acum
-    }, {})
+    return Object.values(players).reduce(
+      (acum: Record<string, boolean>, player) => {
+        acum[player.id] = status === 'ended' && player.score >= maxScore
+        return acum
+      },
+      {}
+    )
   }, [players, status])
 
   return (
