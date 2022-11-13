@@ -142,7 +142,7 @@ export const GameProvider = ({ children }: Props) => {
 
   const startGame = useCallback(() => {
     const options: any = {}
-    if (process.env['REACT_APP_LOCAL']) {
+    if (process.env['REACT_APP_LOCAL'] === 'yes') {
       options.disableTimers = true
     }
     socket?.emit('start-game', options)
