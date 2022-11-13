@@ -70,7 +70,7 @@ const Prompt = () => {
                 value={prompt}
                 onChange={(e) => setPrompt(e.currentTarget.value)}
               />
-              <Button onClick={onSendPrompt} disabled={!prompt}>
+              <Button type='submit' onClick={onSendPrompt} disabled={!prompt}>
                 Submit prompt
               </Button>
             </InputGroup>

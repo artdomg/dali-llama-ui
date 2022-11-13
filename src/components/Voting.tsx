@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { useGame } from '../context/GameProvider'
 import StatusBar from './StatusBar'
@@ -31,6 +32,13 @@ const Voting = () => {
   const { currentTurn, players, isLeader, sendLeaderChoice, currentPrompt } =
     useGame()
 
+  const randomizedPlayers = useMemo(() => {
+    const filteredPlayers = Object.values(players).filter(
+      (player) => !!player.choiceUrl
+    )
+    return filteredPlayers.sort((a, b) => (Math.random() > 0.5 ? -1 : 1))
+  }, [players])
+
   return (
     <VotingContainer>
       <StatusBar
@@ -42,17 +50,15 @@ const Voting = () => {
       />
       <p>{currentPrompt.text}</p>
       <ImagesContainer>
-        {Object.values(players)
-          .filter((player) => !!player.choiceUrl)
-          .map((player) => (
-            <div
-              key={player.id}
-              className={isLeader ? 'enabled' : ''}
-              onClick={isLeader ? () => sendLeaderChoice(player.id) : undefined}
-            >
-              <img src={player.choiceUrl} alt='choice' />
-            </div>
-          ))}
+        {randomizedPlayers.map((player) => (
+          <div
+            key={player.id}
+            className={isLeader ? 'enabled' : ''}
+            onClick={isLeader ? () => sendLeaderChoice(player.id) : undefined}
+          >
+            <img src={player.choiceUrl} alt='choice' />
+          </div>
+        ))}
       </ImagesContainer>
     </VotingContainer>
   )

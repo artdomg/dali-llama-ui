@@ -1,4 +1,4 @@
-import { Alert, Button, Form } from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
 import { useAsyncCallback } from 'react-async-hook'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -45,7 +45,7 @@ const Home = () => {
           value={password}
         />
         {createRoomAsync.error && (
-          <Alert variant='danger'>{createRoomAsync.error.message}</Alert>
+          <div className='text-center'>{createRoomAsync.error.message}</div>
         )}
         <Button
           type='submit'
