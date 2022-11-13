@@ -53,6 +53,7 @@ type GameContext = {
   setToken: (token: string) => void
   token: string
   startGame: () => void
+  timerId: string
   timer: number
   sendPrompt: (prompt: string) => void
   sendChoice: (choicePrompt: string, choiceUrl: string) => void

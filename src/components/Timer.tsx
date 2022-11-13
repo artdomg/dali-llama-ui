@@ -15,12 +15,15 @@ const Clock = styled.div`
   height: 30px;
 `
 
+let lastTimerId = ''
+
 const Timer = () => {
-  const { timer } = useGame()
+  const { timer, timerId } = useGame()
   const [localTimer, setLocalTimer] = useState(timer)
 
   useEffect(() => {
-    if (!timer) return
+    if (!timer || !timerId || timerId === lastTimerId) return
+    lastTimerId = timerId
     setLocalTimer(timer)
   }, [timer])
 
