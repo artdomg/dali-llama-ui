@@ -39,8 +39,8 @@ const Chat = () => {
   }, [messages.length])
 
   useEffect(() => {
-    if (messages[messages.length - 1]?.text !== 'shake it')
-      return setShaking(false)
+    const text = messages[messages.length - 1]?.text
+    if (text !== 'shake it' && text !== 'hurry up') return setShaking(false)
     setShaking(true)
   }, [messages[messages.length - 1]?.text])
 
