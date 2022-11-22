@@ -3,9 +3,13 @@ const { createPredictions } = require('./replicateApi')
 const main = async (args) => {
   try {
     const prompt = args.prompt
-    console.log('running function')
-    await createPredictions(prompt)
-    return { body: 'Hello World!' }
+    const predictions = await createPredictions(prompt)
+    return {
+      body: {
+        prompt,
+        images: predictions.output,
+      },
+    }
   } catch (err) {
     console.log(err)
     return {
