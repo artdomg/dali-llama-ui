@@ -1,5 +1,5 @@
 packages:
   - name: ai
     actions:
-      - name: hello
+      - name: generate
         runtime: 'nodejs:default'
