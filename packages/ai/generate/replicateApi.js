@@ -10,6 +10,8 @@ const client = axios.create({
   },
 })
 
+console.log('Loaded Replicate API client')
+
 const createPredictions = async (prompt, options = {}) => {
   const {
     num_outputs = 3,
