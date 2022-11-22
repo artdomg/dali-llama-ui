@@ -1,6 +1,8 @@
-const main = (args) => {
-  const prompt = args.prompt
+const { createPredictions } = require('./replicateApi')
 
+const main = async (args) => {
+  const prompt = args.prompt
+  await createPredictions(prompt)
   return { body: 'Hello World!' }
 }
 
