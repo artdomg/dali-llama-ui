@@ -1,0 +1,5 @@
+packages:
+  - name: ai
+    actions:
+      - name: hello
+        runtime: 'nodejs:default'
