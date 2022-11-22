@@ -1,5 +1,0 @@
-packages:
-  - name: ai
-    actions:
-      - name: generate
-        runtime: 'nodejs:default'
