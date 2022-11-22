@@ -1,5 +1,6 @@
 const main = (args) => {
-  console.log(args)
+  const prompt = args.prompt
+
   return { body: 'Hello World!' }
 }
 

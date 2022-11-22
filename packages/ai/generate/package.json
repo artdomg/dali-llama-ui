@@ -1,0 +1,11 @@
+{
+  "name": "generate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.1.3"
+  }
+}
