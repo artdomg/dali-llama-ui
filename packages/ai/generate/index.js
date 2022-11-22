@@ -1,4 +1,4 @@
-const { createPredictions } = require('../replicateApi')
+const { createPredictions } = require('../../../lib/replicateApi')
 
 const main = async (args) => {
   const prompt = args.prompt
